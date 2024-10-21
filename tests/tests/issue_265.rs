@@ -41,9 +41,9 @@ mod maltejanz {
         assert_lex(
             "not word",
             &[
-                (Ok(Token::TK_NOT), "word", 0..3),
+                (Ok(Token::TK_NOT), "not", 0..3),
                 (Ok(Token::TK_WHITESPACE), " ", 3..4),
-                (Ok(Token::TK_WORD), "not", 4..8),
+                (Ok(Token::TK_WORD), "word", 4..8),
             ],
         );
     }
@@ -142,7 +142,7 @@ mod afreeland {
             &[
                 (Ok(Token::Action), "alert", 0..5),
                 (Err(()), " ", 5..6),
-                (Ok(Token::Action), "tsl", 6..9),
+                (Ok(Token::Protocol), "tls", 6..9),
                 (Err(()), " ", 9..10),
                 (
                     Ok(Token::NetworkInfo),
