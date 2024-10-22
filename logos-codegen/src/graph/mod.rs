@@ -563,4 +563,29 @@ mod tests {
         );
         assert_eq!(graph.fork_off(fork), Fork::new().branch(b'!', leaf));
     }
+
+    #[test]
+    fn issue_265_merge() {
+        let mut graph = Graph::new();
+
+        let leaf1 = graph.push(Node::Leaf("::a"));
+        let leaf2 = graph.push(Node::Leaf("::abc"));
+
+        let mut to_merge = Rope::new("abc", leaf2).into_fork(&mut graph);
+
+        to_merge.merge(graph.fork_off(leaf1), &mut graph);
+
+        let mut branches = to_merge.branches();
+
+        let (_, new_rope) = branches.next().unwrap();
+
+        assert_eq!(to_merge, Fork::new().branch(b'a', new_rope).miss(leaf1));
+
+        let middle_node = graph.get(new_rope).unwrap();
+
+        match middle_node {
+            Node::Fork(_) | Node::Leaf(_) => panic!("Should be a rope"),
+            Node::Rope(rope) => assert_eq!(rope, &Rope::new("bc", leaf2).miss_any(leaf1)),
+        }
+    }
 }
