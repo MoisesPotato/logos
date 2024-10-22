@@ -153,3 +153,20 @@ mod afreeland {
         );
     }
 }
+
+mod afreeland_very_simple {
+    use super::*;
+
+    #[derive(Logos, Debug, Clone, Copy, PartialEq)]
+    enum Token {
+        #[token("a")]
+        A,
+        #[regex(r"ab*ac")]
+        Abac,
+    }
+
+    #[test]
+    fn basic() {
+        assert_lex("aba", &[(Ok(Token::A), "a", 0..1), (Err(()), "ba", 1..3)]);
+    }
+}
